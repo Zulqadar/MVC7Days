@@ -1,0 +1,139 @@
+﻿@model MVC7Days.Models.Student
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registration</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <br /><br />
+                <h1>MVC 7 DAYs Tutorial [CRUD]</h1><hr />
+
+                @if (ViewBag.Msg != null)
+                {
+                    <div class="alert alert-info">
+                        <strong>@ViewBag.Msg</strong>
+                    </div>
+                }
+
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-info">
+                        <strong>@TempData["Message"]</strong>
+                    </div>
+                }
+
+
+                @using (Html.BeginForm("Registration", "Student", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label for="StudentName">Student Name:</label>
+                        @Html.TextBoxFor(m => m.StudentName, new { @class = "form-control", @placeholder = "Enter Student Name" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Age">Student Age:</label>
+                        @Html.TextBoxFor(m => m.Age, new { @class = "form-control", @placeholder = "Enter Student Age" })
+                    </div>
+                    @Html.HiddenFor(m => m.StudentID)
+                    <button class="btn btn-primary" name="btnsubmit" type="submit">Submit</button>
+                    <button class="btn btn-danger btnCancel" style="display:none" type="button">Cancel</button>
+                }
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <div class="card-title">
+                            <h4>List of Students</h4>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Student Name</th>
+                                    <th>Student Age</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model._lstStudent != null && Model._lstStudent.Count() > 0)
+                                {
+                                    int count = 0;
+                                    foreach (var st in Model._lstStudent)
+                                    {
+                                        <tr>
+                                            <td>@(++count)</td>
+                                            <td class="name">@st.StudentName</td>
+                                            <td class="age">@st.Age</td>
+                                            <td>
+                                                <button type="button" data-id="@st.StudentID" class="btn btn-info btnEdit">Edit</button>
+                                                <a href="@Url.Action("DeleteStudent","Student",new { @StudentID=st.StudentID})" class="btn btn-danger btnDelete">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No Records</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(".btnEdit").on("click", function () {
+            var name = $(this).parents("tr").find(".name").text();
+            var age = $(this).parents("tr").find(".age").text();
+            var StudentID = $(this).data("id");
+
+            $("#StudentName").val(name);
+            $("#Age").val(age);
+
+            $("#StudentID").val(StudentID);
+
+            $("button[type=submit]").val('update').text('Update');
+            $(".btnCancel").show();
+        })
+
+        $(".btnCancel").on("click", function () {
+            $("#StudentName").val("");
+            $("#Age").val("");
+            $("#StudentID").val("");
+
+            $("button[type=submit]").val('submit').text('Submit');
+            $(".btnCancel").hide();
+        })
+    </script>
+
+</body>
+</html>

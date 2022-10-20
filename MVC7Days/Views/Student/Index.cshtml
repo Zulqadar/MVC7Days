@@ -1,0 +1,25 @@
+﻿
+@{
+    Layout = null;
+
+    MVC7Days.Models.Student st = ViewData["stu"] as MVC7Days.Models.Student;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+       <span>ViewBag Value : </span> @ViewBag.myViewData <br />
+       
+        <span>Student Name by ViewData: @st.StudentName </span> <br />
+        <span>Student Name by ViewBag: @ViewBag.StuBag.StudentName </span>
+
+    </div>
+</body>
+</html>
